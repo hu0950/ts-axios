@@ -33,3 +33,27 @@ export function processHeaders(headers: any, data: any): any {
   }
   return headers
 }
+
+/**
+ * 将响应的header string转化为obj
+ * @param {string} headers
+ * @returns {any}
+ */
+export function parseHeaders(headers: string): any {
+  // 创建空对象
+  let parsedObj = Object.create(null)
+
+  if (!headers) {
+    return parsedObj
+  }
+  headers.split('\r\n').forEach(line => {
+    let [key, val] = line.split(':')
+    key = key.trim().toLocaleLowerCase()
+    if (!key) return
+    if (val) {
+      val = val.trim()
+    }
+    parsedObj[key] = val
+  })
+  return parsedObj
+}
