@@ -1,41 +1,17 @@
-import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from './types'
-import xhr from './core/xhr'
-import { buildURL } from './helper/url'
-import { transformRequest, transformResponse } from './helper/data'
-import { processHeaders } from './helper/header'
+import { AxiosInstance } from './types'
+import Axios from './core/axios'
+import { extend } from './helper/util'
 
-function axios(config: AxiosRequestConfig): AxiosPromise {
-  processConfig(config)
-  return xhr(config).then(res => {
-    return transformResponseData(res)
-  })
+// AxiosInstance是混合类型接口，我们希望在这个函数中，所创建的实例对象，
+// 符合这个AxiosInstance接口的描述，既有函数，又有属性，既可以实现直接调用axios函数，又可以调用axios[method]方法
+function creatInstance(): AxiosInstance {
+  const context = new Axios()
+  // TODO: 为什么不用类的实例直接调用方法： context.request，结论是希望instance上有request方法
+  const instance = Axios.prototype.request.bind(context)
+  extend(instance, context)
+  // TypeScript 不能正确推断 instance 的类型，因此需手动断言成AxiosInstance类型
+  return instance as AxiosInstance
 }
-
-function processConfig(config: AxiosRequestConfig): void {
-  config.url = transformURL(config)
-  // 先处理headers、再转换data，是因为处理headers时，需要知道data原本的类型
-  config.headers = transformHeaders(config)
-  config.data = transformRequestData(config)
-}
-
-function transformURL(config: AxiosRequestConfig): string {
-  const { url, params } = config
-  // TODO: 确保url不为空--> url!(断言方式)？？？有可能不存在？？？
-  return buildURL(url!, params)
-}
-
-function transformRequestData(config: AxiosRequestConfig): string {
-  return transformRequest(config.data)
-}
-
-function transformHeaders(config: AxiosRequestConfig): any {
-  const { headers = {}, data } = config
-  return processHeaders(headers, data)
-}
-
-function transformResponseData(res: AxiosResponse): AxiosResponse {
-  res.data = transformResponse(res.data)
-  return res
-}
+const axios = creatInstance()
 
 export default axios

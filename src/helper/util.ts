@@ -15,3 +15,12 @@ export function isPlainObject(val: any): boolean {
 export function isDate(val: any): val is Date {
   return toString.call(val) === '[object Date]'
 }
+
+// 将from中的属性（包括原型上的属性）都扩展到to中
+// TODO：交叉类型的使用
+export function extend<T, U>(to: T, from: U): T & U {
+  for (let key in from) {
+    ;(to as T & U)[key] = from[key] as any
+  }
+  return to as T & U
+}

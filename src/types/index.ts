@@ -44,3 +44,18 @@ export interface AxiosError extends Error {
 
 // 这样的写法：当axios返回的是AxiosPromise类型，则resolve函数中的参数就是一个AxiosResponse类型
 export interface AxiosPromise extends Promise<AxiosResponse> {}
+
+interface Axios {
+  request(config: AxiosRequestConfig): AxiosPromise
+  get(url: string, config?: AxiosRequestConfig): AxiosPromise
+  delete(url: string, config?: AxiosRequestConfig): AxiosPromise
+  head(url: string, config?: AxiosRequestConfig): AxiosPromise
+  options(url: string, config?: AxiosRequestConfig): AxiosPromise
+  post(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+  put(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+  patch(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise
+}
+
+export interface AxiosInstance extends Axios {
+  (config: AxiosRequestConfig): AxiosPromise
+}
