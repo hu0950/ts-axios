@@ -30,20 +30,14 @@ axios.put('/extend/put', { msg: 'put' })
 
 axios.patch('/extend/patch', { msg: 'patch' })
 
-// axios({
-//   url: '/extend/post',
-//   method: 'post',
-//   data: {
-//     msg: 'hi'
-//   }
-// })
-//
-// axios('/extend/post', {
-//   method: 'post',
-//   data: {
-//     msg: 'hello'
-//   }
-// })
+// axios直接可接收两个参数（url，config）
+axios('/extend/post', {
+  method: 'post',
+  data: {
+    msg: 'axios直接可接收两个参数（url，config）'
+  }
+})
+
 
 // interface ResponseData<T = any> {
 //   code: number

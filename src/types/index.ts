@@ -57,5 +57,9 @@ interface Axios {
 }
 
 export interface AxiosInstance extends Axios {
+  // 只有一个参数
   (config: AxiosRequestConfig): AxiosPromise
+  // 两个参数
+  // TODO: ERROR -> config 是选填的？？？
+  (url: string, config: AxiosRequestConfig): AxiosPromise
 }
