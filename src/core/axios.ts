@@ -8,6 +8,7 @@ import {
 } from '../types'
 import dispatchRequest from './dispatchRequest'
 import InterceptorManager from './interceptor'
+import mergeConfig from './mergeConfig'
 
 interface Interceptors {
   request: InterceptorManager<AxiosRequestConfig>
@@ -21,9 +22,11 @@ interface PromiseChain {
 
 export default class Axios {
   interceptors: Interceptors
+  defaults: AxiosRequestConfig
 
   // 实例化InterceptorManager，使用外部在调用Axios.interceptors.request.use()方法，设置拦截器
-  constructor() {
+  constructor(initConfig: AxiosRequestConfig) {
+    this.defaults = initConfig
     this.interceptors = {
       request: new InterceptorManager<AxiosRequestConfig>(),
       response: new InterceptorManager<AxiosResponse>()
@@ -40,6 +43,8 @@ export default class Axios {
     } else {
       config = url
     }
+
+    config = mergeConfig(this.defaults, config)
 
     // 初始值, 先将请求放入chain中
     const chain: PromiseChain[] = [
@@ -63,7 +68,6 @@ export default class Axios {
     while (chain.length) {
       // chain有确定值，不为空
       const { resolved, rejected } = chain.shift()!
-      debugger
       // resolved函数的res，依赖上一个函数的return值，因此，response第一个的promise resolve函数的res是dispatchRequest的return的response的值
       promise = promise.then(resolved, rejected)
     }

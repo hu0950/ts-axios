@@ -22,6 +22,8 @@ export interface AxiosRequestConfig {
   data?: any // post、patch 等类型请求的数据
   responseType?: XMLHttpRequestResponseType // 用于指定响应的数据类型
   timeout?: number
+  // 合并参数时，会通过config2[key] 这种索引的方式访问，因此，需添加一个字符串索引签名
+  [propName: string]: any
 }
 
 export interface AxiosResponse<T = any> {
