@@ -74,14 +74,14 @@ axios({
 })
 
 axios({
-    method: 'post',
-    url: '/base/post',
-    data: {
-        a: 3,
-        b: 4
-    }
+  method: 'post',
+  url: '/base/post',
+  data: {
+      a: 3,
+      b: 4
+  }
 }).then(res => {
-    console.log(2222, res)
+  console.log(2222, res)
 })
 
 // post请求 - data为一般formdata对象

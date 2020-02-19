@@ -1,7 +1,35 @@
-import { AxiosRequestConfig, AxiosPromise, Method } from '../types'
+import {
+  AxiosRequestConfig,
+  AxiosPromise,
+  Method,
+  AxiosResponse,
+  ResolvedFn,
+  RejectedFn
+} from '../types'
 import dispatchRequest from './dispatchRequest'
+import InterceptorManager from './interceptor'
+
+interface Interceptors {
+  request: InterceptorManager<AxiosRequestConfig>
+  response: InterceptorManager<AxiosResponse>
+}
+
+interface PromiseChain {
+  resolved: ResolvedFn
+  rejected?: RejectedFn
+}
 
 export default class Axios {
+  interceptors: Interceptors
+
+  // 实例化InterceptorManager，使用外部在调用Axios.interceptors.request.use()方法，设置拦截器
+  constructor() {
+    this.interceptors = {
+      request: new InterceptorManager<AxiosRequestConfig>(),
+      response: new InterceptorManager<AxiosResponse>()
+    }
+  }
+
   // 函数重载
   request(url: any, config?: any): AxiosPromise {
     if (typeof url === 'string') {
@@ -12,7 +40,34 @@ export default class Axios {
     } else {
       config = url
     }
-    return dispatchRequest(config)
+
+    // 初始值, 先将请求放入chain中
+    const chain: PromiseChain[] = [
+      {
+        resolved: dispatchRequest,
+        rejected: undefined
+      }
+    ]
+
+    this.interceptors.request.forEach(interceptor => {
+      chain.unshift(interceptor)
+    })
+
+    // response
+    this.interceptors.response.forEach(interceptor => {
+      chain.push(interceptor)
+    })
+
+    let promise = Promise.resolve(config) // 初始值
+
+    while (chain.length) {
+      // chain有确定值，不为空
+      const { resolved, rejected } = chain.shift()!
+      debugger
+      // resolved函数的res，依赖上一个函数的return值，因此，response第一个的promise resolve函数的res是dispatchRequest的return的response的值
+      promise = promise.then(resolved, rejected)
+    }
+    return promise
   }
   get(url: string, config?: AxiosRequestConfig): AxiosPromise {
     return this._requestMethodWithoutData('get', url, config)

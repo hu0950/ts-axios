@@ -8,6 +8,7 @@ export default function dispatchRequest(
   config: AxiosRequestConfig
 ): AxiosPromise {
   processConfig(config)
+  // 返回promise，其中参数是res
   return xhr(config).then(res => {
     return transformResponseData(res)
   })

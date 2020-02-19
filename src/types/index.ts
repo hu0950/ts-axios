@@ -20,7 +20,7 @@ export interface AxiosRequestConfig {
   headers?: any
   params?: any // head、get 等类型请求的数据
   data?: any // post、patch 等类型请求的数据
-  responseType?: XMLHttpRequestResponseType // 用于指定响应的数据类
+  responseType?: XMLHttpRequestResponseType // 用于指定响应的数据类型
   timeout?: number
 }
 
@@ -46,6 +46,10 @@ export interface AxiosError extends Error {
 export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> {}
 
 interface Axios {
+  interceptors: {
+    request: AxiosInterceptorManager<AxiosRequestConfig>
+    response: AxiosInterceptorManager<AxiosResponse>
+  }
   request<T = any>(config: AxiosRequestConfig): AxiosPromise<T>
   get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
   delete<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
@@ -74,4 +78,20 @@ export interface AxiosInstance extends Axios {
   // 两个参数
   // config-非必填参数，如果没有传，默认是get方式
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
+}
+
+export interface AxiosInterceptorManager<T> {
+  // 返回number标识已创建的拦截器
+  // resolved的类型是一个泛型函数
+  use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
+  eject(id: number): void
+}
+
+// ResolvedFn泛型函数可传入T类型的val，支持返回T类型的值（同步），或promise（异步）-> promise的参数也是T类型的
+export interface ResolvedFn<T = any> {
+  (val: T): T | Promise<T>
+}
+
+export interface RejectedFn {
+  (error: any): any
 }
