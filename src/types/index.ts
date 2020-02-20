@@ -22,6 +22,10 @@ export interface AxiosRequestConfig {
   data?: any // post、patch 等类型请求的数据
   responseType?: XMLHttpRequestResponseType // 用于指定响应的数据类型
   timeout?: number
+  // 预处理请求data - put、post 和 patch方法可用
+  transformRequest?: AxiosTransformFn | AxiosTransformFn[]
+  // 预处理返回data - put、post 和 patch方法可用
+  transformResponse?: AxiosTransformFn | AxiosTransformFn[]
   // 合并参数时，会通过config2[key] 这种索引的方式访问，因此，需添加一个字符串索引签名
   [propName: string]: any
 }
@@ -97,4 +101,8 @@ export interface ResolvedFn<T = any> {
 
 export interface RejectedFn {
   (error: any): any
+}
+
+export interface AxiosTransformFn {
+  (data: any, headers?: any): any
 }
