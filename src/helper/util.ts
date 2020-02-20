@@ -25,6 +25,11 @@ export function extend<T, U>(to: T, from: U): T & U {
   return to as T & U
 }
 
+/**
+ * 深度复制
+ * @param objs []
+ * @returns {any}
+ */
 export function deepMerge(...objs: any[]): any {
   const result = Object.create(null)
 
@@ -33,6 +38,7 @@ export function deepMerge(...objs: any[]): any {
       Object.keys(obj).forEach(key => {
         const val = obj[key]
         if (isPlainObject(val)) {
+          // TODO:
           if (isPlainObject(result[key])) {
             result[key] = deepMerge(result[key], val)
           } else {

@@ -1,4 +1,5 @@
-import { isPlainObject } from './util'
+import { deepMerge, isPlainObject } from './util'
+import { Method } from '../types'
 
 /**
  * 规范化headers的属性
@@ -56,4 +57,38 @@ export function parseHeaders(headers: string): any {
     parsedObj[key] = val
   })
   return parsedObj
+}
+
+/**
+ *
+ * @param headers
+ * @param {Method} method
+ * @returns {any}
+ */
+export function flattenHeaders(headers: any, method: Method): any {
+  // TODO: ??
+  if (!headers) {
+    return headers
+  }
+
+  // 合并headers
+  // headers[method]会根据不同的method，取出method方法对应的header
+  headers = deepMerge(headers.common || {}, headers[method] || {}, headers)
+
+  const methodToDelete = [
+    'delete',
+    'get',
+    'head',
+    'options',
+    'post',
+    'put',
+    'patch',
+    'common'
+  ]
+
+  methodToDelete.forEach(method => {
+    delete headers[method]
+  })
+
+  return headers
 }
