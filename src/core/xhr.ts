@@ -73,7 +73,8 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
         )
       )
     }
-
+    console.log('data, config', config)
+    console.log('data11111', data)
     // 请求的headers
     headers &&
       Object.keys(headers).forEach(name => {

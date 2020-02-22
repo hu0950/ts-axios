@@ -13,7 +13,7 @@ const defaults: AxiosRequestConfig = {
   // 先处理headers、再转换data，是因为处理headers时，需要知道data原本的类型
   transformRequest: [
     function(data: any, headers: any): any {
-      processHeaders(data, headers)
+      processHeaders(headers, data)
       return transformRequest(data)
     }
   ],

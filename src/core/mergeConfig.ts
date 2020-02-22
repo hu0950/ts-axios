@@ -6,11 +6,11 @@ let strats = Object.create(null)
 
 // 三种取值策略：
 function defaultStrat(val1: any, val2: any): any {
-  return typeof val2 !== undefined ? val2 : val1
+  return typeof val2 !== 'undefined' ? val2 : val1
 }
 
 function fromValConfig2Strat(val1: any, val2: any): any {
-  if (typeof val2 !== undefined) {
+  if (typeof val2 !== 'undefined') {
     return val2
   }
 }
@@ -35,7 +35,7 @@ stratKeysFromVal2.forEach(key => {
   strats[key] = fromValConfig2Strat
 })
 
-const stratKeysDeepMerge = ['header']
+const stratKeysDeepMerge = ['headers']
 stratKeysDeepMerge.forEach(key => {
   strats[key] = deepMergeStrat
 })
@@ -72,9 +72,9 @@ export default function mergeConfig(
    * @param {string} key
    */
   function mergeField(key: string): void {
-    strats = strats[key] || defaultStrat
+    const strat = strats[key] || defaultStrat
     // 确定执行到这时，config2不会为undefined, 因此，用断言的方式
-    config[key] = strats(config1[key], config2![key])
+    config[key] = strat(config1[key], config2![key])
   }
   return config
 }
