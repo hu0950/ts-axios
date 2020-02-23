@@ -26,7 +26,6 @@ function normalizeHeaderName(headers: any, normalizedName: string): void {
  * @returns {any}
  */
 export function processHeaders(headers: any, data: any): any {
-  debugger
   normalizeHeaderName(headers, 'Content-Type')
   if (isPlainObject(data)) {
     if (headers && !headers['Content-Type']) {
