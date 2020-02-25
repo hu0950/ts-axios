@@ -8,8 +8,8 @@ import transform from './transform'
 export default function dispatchRequest(
   config: AxiosRequestConfig
 ): AxiosPromise {
+  throwIfCancellationRequest(config)
   processConfig(config)
-  console.log('config.headers', config.headers)
   // 返回promise，其中参数是res
   return xhr(config).then(res => {
     // console.log('config11111', config)
@@ -41,4 +41,10 @@ function transformHeaders(config: AxiosRequestConfig): any {
 function transformResponseData(res: AxiosResponse): AxiosResponse {
   res.data = transform(res.data, res.headers, res.config.transformRequest)
   return res
+}
+
+function throwIfCancellationRequest(config: AxiosRequestConfig): void {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested()
+  }
 }

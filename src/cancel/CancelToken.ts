@@ -9,6 +9,13 @@ export default class CancelToken {
   // reason 是 Cancel 类的实例
   reason?: Cancel
 
+  // 判断如果存在 this.reason，说明请求携带的 cancelToken 已经被使用过，直接抛错。
+  throwIfRequested(): void {
+    if (this.reason) {
+      throw this.reason
+    }
+  }
+
   constructor(executor: CancelExecutor) {
     let resolvedPromise: ResolvedPromise
     // 定义一个处于pedding状态的promise

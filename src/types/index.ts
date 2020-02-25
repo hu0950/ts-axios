@@ -121,6 +121,8 @@ export interface AxiosTransformFn {
 export interface CancelToken {
   promise: Promise<Cancel>
   reason?: Cancel
+
+  throwIfRequested(): void
 }
 
 // 取消方法
