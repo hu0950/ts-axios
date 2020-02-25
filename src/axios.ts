@@ -3,6 +3,8 @@ import Axios from './core/axios'
 import { extend } from './helper/util'
 import defaults from './default'
 import mergeConfig from './core/mergeConfig'
+import CancelToken from './cancel/CancelToken'
+import Cancel, { isCancel } from './cancel/Cancel'
 
 // AxiosInstance是混合类型接口，我们希望在这个函数中，所创建的实例对象，
 // 符合这个AxiosInstance接口的描述，既有函数，又有属性，既可以实现直接调用axios函数，又可以调用axios[method]方法
@@ -20,5 +22,10 @@ const axios = createInstance(defaults)
 axios.create = function(config) {
   return createInstance(mergeConfig(defaults, config))
 }
+
+// 取消请求相关静态方法
+axios.CancelToken = CancelToken
+axios.Cancel = Cancel
+axios.isCancel = isCancel
 
 export default axios
