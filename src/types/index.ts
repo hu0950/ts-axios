@@ -88,8 +88,13 @@ export interface AxiosInstance extends Axios {
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 }
 
+// 用于添加静态方法
 export interface AxiosStatic extends AxiosInstance {
   create(config?: AxiosRequestConfig): AxiosInstance
+
+  CancelToken: CancelTokenStatic
+  Cancel: CancelStatic
+  isCancel: (value: any) => boolean
 }
 
 export interface AxiosInterceptorManager<T> {
@@ -135,7 +140,16 @@ export interface CancelTokenSource {
 
 // CancelToken类的类类型
 export interface CancelTokenStatic {
+  // TODO: 构造函数，如何声明？？？
   new (executor: CancelExecutor): CancelToken
 
   source(): CancelTokenSource
+}
+
+export interface Cancel {
+  message?: string
+}
+
+export interface CancelStatic {
+  new (message?: string): Cancel
 }
