@@ -119,8 +119,8 @@ export interface AxiosTransformFn {
 
 // CancelToken类的实例类型
 export interface CancelToken {
-  promise: Promise<string>
-  reason?: string
+  promise: Promise<Cancel>
+  reason?: Cancel
 }
 
 // 取消方法

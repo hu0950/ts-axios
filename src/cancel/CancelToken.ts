@@ -1,16 +1,18 @@
 import { Canceler, CancelExecutor, CancelTokenSource } from '../types'
+import Cancel from './Cancel'
 
 interface ResolvedPromise {
-  (reason?: string): void
+  (reason?: Cancel): void
 }
 export default class CancelToken {
-  promise: Promise<string>
-  reason?: string
+  promise: Promise<Cancel>
+  // reason 是 Cancel 类的实例
+  reason?: Cancel
 
   constructor(executor: CancelExecutor) {
     let resolvedPromise: ResolvedPromise
     // 定义一个处于pedding状态的promise
-    this.promise = new Promise<string>(resolve => {
+    this.promise = new Promise<Cancel>(resolve => {
       // 将 resolvedPromise 指向 resolve
       resolvedPromise = resolve
     })
@@ -19,7 +21,7 @@ export default class CancelToken {
       if (this.reason) {
         return
       }
-      this.reason = message
+      this.reason = new Cancel(message)
       // 执行resolvedPromise，相当于执行resolve(), 将promise从pedding状态置成resolve状态
       resolvedPromise(this.reason)
     })
