@@ -10,7 +10,8 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
       method = 'get',
       headers = {},
       responseType,
-      timeout
+      timeout,
+      cancelToken
     } = config
 
     // TODO: 对于new XMLHttpRequest()，做了什么？
@@ -73,8 +74,6 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
         )
       )
     }
-    console.log('data, config', config)
-    console.log('data11111', data)
     // 请求的headers
     headers &&
       Object.keys(headers).forEach(name => {
@@ -84,6 +83,13 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
           request.setRequestHeader(name, headers[name])
         }
       })
+
+    if (cancelToken) {
+      cancelToken.promise.then(reason => {
+        request.abort()
+        reject(reason)
+      })
+    }
 
     request.send(data)
 

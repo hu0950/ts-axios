@@ -26,6 +26,7 @@ export interface AxiosRequestConfig {
   transformRequest?: AxiosTransformFn | AxiosTransformFn[]
   // 预处理返回data - put、post 和 patch方法可用
   transformResponse?: AxiosTransformFn | AxiosTransformFn[]
+  cancelToken?: CancelToken
   // 合并参数时，会通过config2[key] 这种索引的方式访问，因此，需添加一个字符串索引签名
   [propName: string]: any
 }
@@ -109,4 +110,32 @@ export interface RejectedFn {
 
 export interface AxiosTransformFn {
   (data: any, headers?: any): any
+}
+
+// CancelToken类的实例类型
+export interface CancelToken {
+  promise: Promise<string>
+  reason?: string
+}
+
+// 取消方法
+export interface Canceler {
+  (message?: string): void
+}
+
+// CancelToken类构造函数参数的定义，该参数支持传入一个类型为Canceler的函数
+export interface CancelExecutor {
+  (cancel: Canceler): void
+}
+
+export interface CancelTokenSource {
+  token: CancelToken
+  cancel: Canceler
+}
+
+// CancelToken类的类类型
+export interface CancelTokenStatic {
+  new (executor: CancelExecutor): CancelToken
+
+  source(): CancelTokenSource
 }
