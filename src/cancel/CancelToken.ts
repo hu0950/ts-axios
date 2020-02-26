@@ -28,6 +28,8 @@ export default class CancelToken {
       if (this.reason) {
         return
       }
+      // 将Cancel的实例化对象对象赋值给this.reason，用户在请求catch中，可通过访问reason.message，获取到在外部通过调用executor，传入的错误信息
+      // 个人理解：this.reason 之所以是一个Cancel的实例化，而不只是一个简单的错误信息字符串，是为了在外层的请求catch中，可以区分出，这个e是普通错误的error，还是请求取消的error
       this.reason = new Cancel(message)
       // 执行resolvedPromise，相当于执行resolve(), 将promise从pedding状态置成resolve状态
       resolvedPromise(this.reason)

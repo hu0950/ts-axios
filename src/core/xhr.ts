@@ -87,6 +87,7 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
     if (cancelToken) {
       cancelToken.promise.then(reason => {
         request.abort()
+        // reason是Cancel对象的实例
         reject(reason)
       })
     }
