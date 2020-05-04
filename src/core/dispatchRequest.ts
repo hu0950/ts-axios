@@ -12,7 +12,6 @@ export default function dispatchRequest(
   processConfig(config)
   // 返回promise，其中参数是res
   return xhr(config).then(res => {
-    // console.log('config11111', config)
     return transformResponseData(res)
   })
 }

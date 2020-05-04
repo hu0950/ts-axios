@@ -14,9 +14,10 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
       cancelToken
     } = config
 
-    // TODO: 对于new XMLHttpRequest()，做了什么？
+    // 实例化一个XMLHttpRequest对象，该对象是使得可以浏览器可以发出HTTP请求与接收HTTP响应。
     const request = new XMLHttpRequest()
 
+    // 设置响应返回的数据格式
     if (responseType) {
       request.responseType = responseType
     }
@@ -26,6 +27,7 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
       request.timeout = timeout
     }
 
+    // 采用method
     request.open(method.toUpperCase(), url, true)
 
     // 当readyState变化时，就会触发该函数
@@ -74,7 +76,8 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
         )
       )
     }
-    // 请求的headers
+
+    // 如果data不为null，则设置请求headers
     headers &&
       Object.keys(headers).forEach(name => {
         if (data === null && name.toLowerCase() === 'content-type') {
@@ -92,6 +95,7 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
       })
     }
 
+    // 发送数据
     request.send(data)
 
     function handleResponse(response: AxiosResponse) {
