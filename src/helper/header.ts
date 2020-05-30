@@ -20,7 +20,7 @@ function normalizeHeaderName(headers: any, normalizedName: string): void {
 }
 
 /**
- *
+ * 若没有设置Content-Type，且data是json类型，则自动设置'application/json;charset=utf-8'
  * @param headers
  * @param data
  * @returns {any}

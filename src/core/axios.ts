@@ -34,6 +34,7 @@ export default class Axios {
   }
 
   // 函数重载
+  // Axios类实现请求的核心，各个属性会最终会调用request
   request(url: any, config?: any): AxiosPromise {
     if (typeof url === 'string') {
       if (!config) {
